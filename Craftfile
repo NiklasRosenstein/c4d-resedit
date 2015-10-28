@@ -1,0 +1,23 @@
+# craftr_module(maxon.c4d.resedit)
+append_search_path('..')
+load_module('maxon.c4d')
+load_module('platform')
+
+defines = ['__C4D_64BIT']
+if platform.id == 'win':
+  defines += ['_WINDOWS']
+elif platform.id == 'mac':
+  defines += ['__MAC']
+
+objects = maxon.c4d.objects(
+  sources = glob('source/**/*.cpp'),
+  options = dict(
+    includes = [local('res')],
+    defines = defines,
+  ),
+)
+
+plugin = maxon.c4d.plugin(
+  filename = local('resedit'),
+  inputs = [maxon.c4d.library, objects],
+)

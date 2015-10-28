@@ -3195,7 +3195,7 @@ public:
 		{
 			Int32 o=0,b,i;
 
-			table=bNewDeprecatedUseArraysInstead TYPE[m_Allocated];
+			table=bNewDeprecatedUseArraysInstead<TYPE>(m_Allocated);
 			if (!table) return nullptr;
 
 			for (b=0;b<m_Blocks.GetCount();b++)
