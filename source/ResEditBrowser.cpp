@@ -27,11 +27,8 @@ extern Bool g_bWasActive;
 enum
 {
 	IDC_BROWSE_BUTTON     = 10000,
-	IDC_PATH_STATIC,
 	IDC_FILE_LIST,
-	IDC_DIRECTORY_TEXT,
 	IDC_DIRECTORY_TREE,
-
 	ID_GLOBAL_STRINGTABLE,
 
 	ID_DUMMY
@@ -39,6 +36,8 @@ enum
 
 CResEditBrowser::CResEditBrowser()
 {
+	m_strPath = GeGetStartupPath() + String("resource");
+	m_dirText = "";
 }
 
 CResEditBrowser::~CResEditBrowser()
@@ -55,27 +54,23 @@ CResEditBrowser::~CResEditBrowser()
 \*********************************************************************/
 Bool CResEditBrowser::CreateLayout(void)
 {
-	GroupBegin(101, BFH_SCALEFIT | BFV_SCALEFIT, 1, 0, "", 0);
-		GroupBegin(201, BFH_SCALEFIT, 0, 2, "", 0);
-			AddButton(IDC_BROWSE_BUTTON, BFH_LEFT, 0, 0, GeLoadString(IDS_BROWSE));
-			AddStaticText(IDC_PATH_STATIC, BFH_SCALEFIT, 0, 0, "", BORDER_GROUP_IN);
-		GroupEnd();
-
-		GroupBegin(202, BFH_SCALEFIT | BFV_SCALEFIT, 1, 0, "", 0);
-			if (!m_wndTreeView.CreateTreeView(IDC_DIRECTORY_TREE, this, NOTOK, nullptr, TREE_ITEM_SAME_HEIGHT, BFH_SCALEFIT | BFV_SCALEFIT)) return false;
-			AddStaticText(IDC_DIRECTORY_TEXT, BFH_SCALEFIT, 0, 0, "", 0);
-		GroupEnd();
+	GroupBeginInMenuLine();
+	AddButton(IDC_BROWSE_BUTTON, BFH_LEFT, 0, 0, GeLoadString(IDS_BROWSE));
 	GroupEnd();
+
+	GroupBegin(101, BFH_SCALEFIT | BFV_SCALEFIT, 1, 0, "", 0);
+	if (!m_wndTreeView.CreateTreeView(IDC_DIRECTORY_TREE, this, NOTOK, nullptr,
+			TREE_ITEM_SAME_HEIGHT, BFH_SCALEFIT | BFV_SCALEFIT))
+		return false;
+
+	GroupEnd();
+
 	/*m_wndListView.AttachListView(this, IDC_FILE_LIST);
 
 
 	BaseContainer bc;
 	bc.SetInt32('name', LV_COLUMN_TEXT);
 	m_wndListView.SetLayout(1, bc);*/
-
-	m_strPath = GeGetStartupPath() + String("resource");
-	SetString(IDC_PATH_STATIC, m_strPath.GetString());
-
 	return true;
 }
 
@@ -100,7 +95,6 @@ Bool CResEditBrowser::Command(Int32 lID, const BaseContainer &msg)
 		{
 			m_strPath = fn;
 			FillList();
-			SetString(IDC_PATH_STATIC, m_strPath.GetString());
 		}
 		break;
 													}
@@ -142,7 +136,7 @@ Bool CResEditBrowser::Command(Int32 lID, const BaseContainer &msg)
 		}
 		else if (lType == TREEVIEW_SELCHANGE)
 		{
-			SetString(IDC_DIRECTORY_TEXT, pSelItem->GetData()->GetString(ITEM_PATH_NAME));
+			m_dirText = pSelItem->GetData()->GetString(ITEM_PATH_NAME);
 		}
 
 		break;
@@ -166,6 +160,7 @@ public:
 \*********************************************************************/
 void CResEditBrowser::FillList()
 {
+	SetTitle(GeLoadString(IDS_BROWSER_CAPT) + " - " + m_strPath.GetString());
 	GeShowMouse(MOUSE_BUSY);
 
 	m_wndTreeView.LockWindowUpdate();
@@ -292,10 +287,7 @@ void CResEditBrowser::BrowsePath(Filename fn)
 \*********************************************************************/
 Bool CResEditBrowser::InitValues(void)
 {
-	SetTitle(GeLoadString(IDS_BROWSER_CAPT));
-
-	//FillList();
-
+	FillList();
 	return true;
 }
 
@@ -308,6 +300,11 @@ Bool CResEditBrowser::InitValues(void)
 \*********************************************************************/
 Int32 CResEditBrowser::Message(const BaseContainer &msg, BaseContainer &result)
 {
+	if (msg.GetId() == BFM_GETCURSORINFO && m_dirText.Content()) {
+		result.SetId(msg.GetId());
+		result.SetString(RESULT_BUBBLEHELP, "<b>Selected:</b> " + m_dirText.GetString());
+		return true;
+	}
 	return GeDialog::Message(msg, result);
 }
 

@@ -29,6 +29,7 @@ protected:
 	void BrowsePath(Filename fn);
 
 	Filename m_strPath;
+	Filename m_dirText;
 	/*SimpleListView m_wndListView;*/
 	TreeView m_wndTreeView;
 
