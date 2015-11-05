@@ -50,7 +50,7 @@ DIALOG IDC_PROPERTIES_DIALOG
           STATICTEXT IDC_STATIC { NAME IDS_STATIC9; CENTER_V; ALIGN_LEFT; }
           COMBOBOX IDC_HORZ_ALIGN_COMBO
           {
-            ALIGN_TOP; ALIGN_LEFT; SIZE 150, 0; 
+            ALIGN_TOP; ALIGN_LEFT; SIZE 150, 0; // Absolute values that restricts the width
             CHILDS
             {
               0, IDS_ALIGN_CENTER; 
@@ -62,11 +62,11 @@ DIALOG IDC_PROPERTIES_DIALOG
           }
           STATICTEXT IDC_STATIC { NAME IDS_STATIC10; CENTER_V; ALIGN_LEFT; }
           EDITNUMBERARROWS IDC_WIDTH_EDIT
-          { CENTER_V; CENTER_H; SIZE 70, 0; }
+          { CENTER_V; CENTER_H; SIZE 70, 0; } // Absolute values that restricts the width
           STATICTEXT IDC_STATIC { NAME IDS_STATIC11; CENTER_V; ALIGN_LEFT; }
           COMBOBOX IDC_VERT_ALIGN_COMBO
           {
-            ALIGN_TOP; ALIGN_LEFT; SIZE 150, 0; 
+            ALIGN_TOP; ALIGN_LEFT; SIZE 150, 0; // Absolute values that restricts the width
             CHILDS
             {
               0, IDS_ALIGN_CENTER; 
@@ -78,7 +78,7 @@ DIALOG IDC_PROPERTIES_DIALOG
           }
           STATICTEXT IDC_STATIC { NAME IDS_STATIC12; CENTER_V; ALIGN_LEFT; }
           EDITNUMBERARROWS IDC_HEIGHT_EDIT
-          { CENTER_V; CENTER_H; SIZE 70, 0; }
+          { CENTER_V; CENTER_H; SIZE 70, 0; } // Absolute values that restricts the width
         }
         BUTTON IDC_UPDATE_BTN { NAME IDS_BUTTON; ALIGN_TOP; ALIGN_LEFT; }
       }
