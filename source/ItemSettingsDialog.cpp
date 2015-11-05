@@ -65,6 +65,10 @@ CItemSettingsDialog::~CItemSettingsDialog()
 \*********************************************************************/
 Bool CItemSettingsDialog::CreateLayout(void)
 {
+	Int32 flags = SCROLLGROUP_HORIZ | SCROLLGROUP_AUTOHORIZ |
+		SCROLLGROUP_VERT | SCROLLGROUP_AUTOVERT;
+	ScrollGroupBegin(0, BFH_SCALEFIT | BFV_SCALEFIT, flags, 0, 0);
+
 	Bool bRes = GeDialog::CreateLayout() && LoadDialogResource(IDC_PROPERTIES_DIALOG, nullptr, 0);
 
 	m_wndEditboxSettings.Invalidate();
@@ -87,6 +91,7 @@ Bool CItemSettingsDialog::CreateLayout(void)
 
 	if (++g_lNeedFileNew == 4) m_pDocument->OnFileNew();
 
+	GroupEnd();
 	return bRes;
 }
 

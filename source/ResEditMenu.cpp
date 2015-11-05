@@ -68,7 +68,7 @@ Bool CResEditMenu::Execute(BaseDocument *doc)
 		g_pToolbar->m_bCloseState = false;
 
 		g_pDlgPreview->Open(DLG_TYPE_ASYNC, PLUGIN_ID_DIALOG_PREVIEW, 100, 100, 400, 400);
-		g_pSettingsDlg->Open(DLG_TYPE_ASYNC, PLUGIN_ID_ITEM_SETTINGS, 900, 100, 400, 400);
+		g_pSettingsDlg->Open(DLG_TYPE_ASYNC, PLUGIN_ID_ITEM_SETTINGS, 900, 100, 550, 400);
 		g_pTreeDialog->Open(DLG_TYPE_ASYNC, PLUGIN_ID_TREE_DIALOG, 500, 100, 400, 400);
 		g_pToolbar->Open(DLG_TYPE_ASYNC, PLUGIN_ID_TOOLBAR, 0, 100, 1, 1, 1);
 
