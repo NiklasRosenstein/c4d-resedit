@@ -254,6 +254,17 @@ Bool CDialogCustomElement::Save(BaseFile* pFile, String strFill)
 				WriteString(pFile, pProp[i].ident);
 				WriteString(pFile, " ");
 				WriteString(pFile, String::IntToString(pBC->GetInt32(pProp[i].id)));
+
+				// XXX: BITMAPBUTTON SIZE is a CUSTOMTYPE_LONG property, yet it
+				// requires a tuple for the SIZE parameter. Can we find a better
+				// way than hardcoding this?
+				// https://github.com/nr-plugins/resedit/issues/2
+				if (String(pElement->m_pChResSym) == String("BITMAPBUTTON") &&
+						String(pProp[i].ident) == String("SIZE")) {
+					WriteString(pFile, ", ");
+					WriteString(pFile, String::IntToString(pBC->GetInt32(pProp[i].id)));
+				}
+
 				WriteString(pFile, "; ");
 				b = true;
 			}
