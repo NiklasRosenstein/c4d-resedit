@@ -96,6 +96,9 @@ void CDialogDoc::OnFileNew()
 	UpdateAllViews(true);
 
 	m_bStringSymbolsChanged = m_bControlSymbolsChanged = false;
+
+	CriticalAssert(m_lLanguageIDTable >= 0);
+	CriticalAssert(m_lLanguageIDList >= 0);
 }
 
 /*********************************************************************\

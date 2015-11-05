@@ -61,6 +61,7 @@ void CStringTableElement::Init(String strID, Int32 lInitLanguages)
 \*********************************************************************/
 void CStringTableElement::SetItemText(Int32 lLang, String str, String* pCommand)
 {
+	CriticalAssert(lLang >= 0 && lLang < m_lLanguages);
 	*m_ppstrText[lLang] = str;
 	if (pCommand)
 		*m_ppstrText[lLang + m_lLanguages] = *pCommand;

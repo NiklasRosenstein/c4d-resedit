@@ -45,6 +45,14 @@ CLanguageList::~CLanguageList()
 void CLanguageList::Init()
 {
 	Filename resourcepath = GeGetStartupPath() + Filename("resource");
+
+	#if API_VERSION >= 16000
+		// R16 has a new resource directory structure. The c4d_language.str
+		// files we are searching for are in resource/modules/c4dplugin/strings_xx.
+		// Fix for https://github.com/nr-plugins/resedit/issues/4
+		resourcepath = resourcepath + "modules" + "c4dplugin";
+	#endif
+
 	AutoAlloc <BrowseFiles> pBrowse;
 	pBrowse->Init(resourcepath, false);
 
@@ -90,6 +98,8 @@ void CLanguageList::Init()
 			}
 		}
 	}
+
+	CriticalAssert(GetNumLanguages() > 0);
 }
 
 /*********************************************************************\
