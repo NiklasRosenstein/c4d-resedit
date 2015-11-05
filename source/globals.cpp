@@ -81,7 +81,7 @@ void TRACE_STRING(String str)
 	char* pCh = bNewDeprecatedUseArraysInstead<char>(lLen + 2);
 	str.GetCString(pCh, lLen + 1);
 	TRACE("%s\n", pCh);
-	delete [] pCh;
+	bDelete(pCh);
 }
 
 #endif // _DEBUG
