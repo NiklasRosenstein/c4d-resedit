@@ -20,6 +20,7 @@ objects = maxon.c4d.objects(
 plugin = maxon.c4d.plugin(
   filename = local('resedit'),
   inputs = [maxon.c4d.library, objects],
+  default = True,
   options = dict(
     msvc_link_with = ['User32.lib'],
   ),
