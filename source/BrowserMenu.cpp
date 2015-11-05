@@ -43,7 +43,7 @@ CBrowserMenu::~CBrowserMenu()
 Bool CBrowserMenu::Execute(BaseDocument *doc)
 {
 	if (!g_pBrowserDialog) return false;
-	g_pBrowserDialog->Open(DLG_TYPE_ASYNC, PLUGIN_ID_BROWSER, -1, -1);
+	g_pBrowserDialog->Open(DLG_TYPE_ASYNC, PLUGIN_ID_BROWSER, -1, -1, 400, 250);
 
 	return true;
 }

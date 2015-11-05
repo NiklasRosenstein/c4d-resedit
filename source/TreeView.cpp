@@ -856,8 +856,8 @@ Bool TreeView::CreateTreeView(Int32 lTreeID, GeDialog* pParent, Int32 lElementTy
 	if (!m_pTree) return false;
 
 	BaseContainer layout;
-	layout.SetInt32('tree', LV_TREE);
 	layout.SetInt32('icon', LV_USER);
+	layout.SetInt32('tree', LV_TREE);
 	m_pTree->SetLayout(2,layout);
 
 	m_pTree->SetRoot(&m_RootItem, &functable, this);
