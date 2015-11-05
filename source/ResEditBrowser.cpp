@@ -97,7 +97,7 @@ Bool CResEditBrowser::Command(Int32 lID, const BaseContainer &msg)
 			FillList();
 		}
 		break;
-													}
+	}
 	case IDC_DIRECTORY_TREE: {
 		TreeViewItem* pSelItem = (TreeViewItem*)msg.GetVoid(TREEVIEW_MESSAGE_ITEM);
 		Int32 lType = msg.GetInt32(TREEVIEW_MESSAGE_TYPE);
@@ -140,7 +140,7 @@ Bool CResEditBrowser::Command(Int32 lID, const BaseContainer &msg)
 		}
 
 		break;
-													 }
+	}
 	};
 	return GeDialog::Command(lID, msg);
 }
