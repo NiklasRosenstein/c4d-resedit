@@ -77,7 +77,7 @@ Bool PluginStart()
 	g_pControlImages = BaseBitmap::Alloc();
 	if (!g_pControlImages)
 		return false;
-	if (g_pControlImages->Init(GeGetPluginPath() + String("res") + String("buttons.tif"))!=IMAGERESULT_OK)
+	if (g_pControlImages->Init(GeGetPluginPath() + String("res") + String("images") + String("toolbar.tif")) != IMAGERESULT_OK)
 		return false;
 
 	g_pstrFillSave = NewObjClear(String);
