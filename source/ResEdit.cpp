@@ -45,6 +45,8 @@ void SaveResEditPrefs()
 			pf->WriteFilename(g_pResEditPrefs->fnNewZip);
 			pf->WriteFilename(g_pResEditPrefs->fnDestZip);
 			g_pResEditPrefs->arOldFiles.Write(pf, 0);
+			pf->WriteInt32(g_pResEditPrefs->toolbarIconSize);
+			pf->WriteInt32(g_pResEditPrefs->toolbarIconOrder);
 			pf->Close();
 		}
 	}
@@ -97,6 +99,8 @@ Bool PluginStart()
 		pf->ReadFilename(&g_pResEditPrefs->fnNewZip);
 		pf->ReadFilename(&g_pResEditPrefs->fnDestZip);
 		g_pResEditPrefs->arOldFiles.Read(pf);
+		pf->ReadInt32(&g_pResEditPrefs->toolbarIconSize);
+		pf->ReadInt32(&g_pResEditPrefs->toolbarIconOrder);
 		pf->Close();
 	}
 	ReadDistriPrefs();

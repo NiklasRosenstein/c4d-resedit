@@ -41,7 +41,11 @@ enum {
 	IDC_SUB_DLG_BTN,
 	IDC_CUSTOM_ELEMENT_BTN,
 
-	IDC_ICONSIZE,
+	IDC_ICONSIZE_SMALL,
+	IDC_ICONSIZE_MEDIUM,
+	IDC_ICONSIZE_LARGE,
+	IDC_ICONORDER_HORIZ,
+	IDC_ICONORDER_VERT,
 	IDC_ICONGROUP,
 
 	IDC_DUMMY // just for the mac comiler :-)
@@ -114,20 +118,12 @@ Bool CResEditToolBar::CreateLayout(void)
 	Bool bRes = GeDialog::CreateLayout();
 	SetTitle(GeLoadString(IDS_RES_EDIT_TOOLBAR));
 
-	GroupBeginInMenuLine();
-	AddComboBox(IDC_ICONSIZE, 0);
-	AddChild(IDC_ICONSIZE, 20, "20");
-	AddChild(IDC_ICONSIZE, 32, "32");
-	SetInt32(IDC_ICONSIZE, 32);  // XXX: Load/Save icon size in preferences
-	GroupEnd();
-
 	GroupBegin(IDC_ICONGROUP, BFH_SCALEFIT | BFV_SCALEFIT, 1, 1, "", 0);
 	UpdateToolbarIcons();
 	GroupEnd();
 
 	if (++g_lNeedFileNew == 4)
 		m_pDocument->OnFileNew();
-
 	return bRes;
 }
 
@@ -149,9 +145,17 @@ Bool CResEditToolBar::Command(Int32 lID, const BaseContainer &msg)
 	}
 
 	switch (lID) {
-		case IDC_ICONSIZE:
+		case IDC_ICONSIZE_SMALL:
+		case IDC_ICONSIZE_MEDIUM:
+		case IDC_ICONSIZE_LARGE:
+			g_pResEditPrefs->toolbarIconSize = lID;
 			UpdateToolbarIcons();
 			return true;
+		case IDC_ICONORDER_HORIZ:
+		case IDC_ICONORDER_VERT:
+			g_pResEditPrefs->toolbarIconOrder = lID;
+			UpdateToolbarIcons();
+			break;
 	}
 	return true;
 }
@@ -187,7 +191,6 @@ Bool CResEditToolBar::AskClose()
 	return false;
 }
 
-
 /*********************************************************************\
 	Function name    : CResEditToolBar::UpdateToolbarIcons
 	Description      :
@@ -196,16 +199,42 @@ Bool CResEditToolBar::AskClose()
 \*********************************************************************/
 void CResEditToolBar::UpdateToolbarIcons()
 {
-	LayoutFlushGroup(IDC_ICONGROUP);
-	Int32 iconSize = 20;
-	GetInt32(IDC_ICONSIZE, iconSize);
+	auto check = [](String const& s, Bool const c) -> String {
+		if (c) return s + "&c&";
+		return s;
+	};
+
+	Int32& iconSizeMode = g_pResEditPrefs->toolbarIconSize;
+	Int32& iconOrderMode = g_pResEditPrefs->toolbarIconOrder;
+
+	Int32 iconSize;
+	switch (iconSizeMode) {
+		case IDC_ICONSIZE_LARGE:
+			iconSize = 34;
+			break;
+		case IDC_ICONSIZE_MEDIUM:
+			iconSize = 26;
+			break;
+		case IDC_ICONSIZE_SMALL:
+		default:
+			iconSize = 20;
+			iconSizeMode = IDC_ICONSIZE_SMALL;
+			break;
+	}
+
+	Int32 cols = 2, rows = 0;
+	if (iconOrderMode != IDC_ICONORDER_VERT) {
+		cols = 0, rows = 2;
+		iconOrderMode = IDC_ICONORDER_HORIZ;
+	}
 
 	IconData icon;
 	icon.bmp = g_pControlImages;
 	icon.w = 20;
 	icon.h = 20;
 
-	GroupBegin(0, 0, 2, 1, "", 0);
+	LayoutFlushGroup(IDC_ICONGROUP);
+	GroupBegin(0, 0, cols, rows, "", 0);
 	for (Int32 idx = 0; idx < TOOLBAR_BUTTON_COUNT; ++idx) {
 		icon.x = g_pButtons[idx].x * 20;
 		icon.y = g_pButtons[idx].y * 20;
@@ -215,4 +244,16 @@ void CResEditToolBar::UpdateToolbarIcons()
 	}
 	GroupEnd();
 	LayoutChanged(IDC_ICONGROUP);
+
+	// Update the menus.
+	MenuFlushAll();
+	MenuSubBegin("Edit");
+	MenuAddString(IDC_ICONSIZE_SMALL, check("Small Icons", iconSizeMode == IDC_ICONSIZE_SMALL));
+	MenuAddString(IDC_ICONSIZE_MEDIUM, check("Medium Icons", iconSizeMode == IDC_ICONSIZE_MEDIUM));
+	MenuAddString(IDC_ICONSIZE_LARGE, check("Large Icons", iconSizeMode == IDC_ICONSIZE_LARGE));
+	MenuAddSeparator();
+	MenuAddString(IDC_ICONORDER_HORIZ, check("Horizontal Layout", iconOrderMode == IDC_ICONORDER_HORIZ));
+	MenuAddString(IDC_ICONORDER_VERT, check("Vertical Layout", iconOrderMode == IDC_ICONORDER_VERT));
+	MenuSubEnd();
+	MenuFinished();
 }
