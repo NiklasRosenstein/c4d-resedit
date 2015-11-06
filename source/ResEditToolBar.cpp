@@ -119,8 +119,8 @@ Bool CResEditToolBar::CreateLayout(void)
 	Int32 a;
 	IconData d;
 	d.bmp = g_pControlImages;
-	d.w = 20;
-	d.h = 20;
+	d.w = CONTROLIMAGE_SIZE;
+	d.h = CONTROLIMAGE_SIZE;
 
 	// add the buttons
 	GroupBegin(100, BFH_SCALEFIT | BFV_SCALEFIT, 1, 1, "", 0);
@@ -134,8 +134,8 @@ Bool CResEditToolBar::CreateLayout(void)
 			BitmapButtonCustomGui* pBtn = (BitmapButtonCustomGui*)AddCustomGui(g_pButtons[a].lID, CUSTOMGUI_BITMAPBUTTON, String(), BFH_FIT, 0, 0, settings);
 			if (pBtn)
 			{
-				d.x = g_pButtons[a].x * 20;
-				d.y = g_pButtons[a].y * 20;
+				d.x = g_pButtons[a].x * CONTROLIMAGE_SIZE;
+				d.y = g_pButtons[a].y * CONTROLIMAGE_SIZE;
 				pBtn->SetImage(&d);
 			}
 		}

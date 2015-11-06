@@ -562,10 +562,10 @@ class Function2 : public TreeViewFunctions
 					drawinfo->frame->DrawSetPen(COLOR_BG);
 					drawinfo->frame->DrawBitmap(pBmp, wx, wy, ww, wh, 0, 0, pBmp->GetBw(), pBmp->GetBh(), BMP_NORMALSCALED);
 				}*/
-				Int32 lWidth = 20, lHeight = 20;
+				Int32 lWidth = CONTROLIMAGE_SIZE, lHeight = CONTROLIMAGE_SIZE;
 				Int32 i = p->GetIcon();
-				Int32 x = (i % 9) * 20;
-				Int32 y = (i / 9) * 20;
+				Int32 x = (i % 9) * CONTROLIMAGE_SIZE;
+				Int32 y = (i / 9) * CONTROLIMAGE_SIZE;
 
 				wx = drawinfo->xpos;
 				wy = drawinfo->ypos;
