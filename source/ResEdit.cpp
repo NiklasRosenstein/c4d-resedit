@@ -45,6 +45,9 @@ void SaveResEditPrefs()
 			pf->WriteFilename(g_pResEditPrefs->fnNewZip);
 			pf->WriteFilename(g_pResEditPrefs->fnDestZip);
 			g_pResEditPrefs->arOldFiles.Write(pf, 0);
+			pf->WriteBool(g_pResEditPrefs->toolbarIconSize);
+			pf->WriteBool(g_pResEditPrefs->toolbarIconOrder);
+			pf->WriteBool(g_pResEditPrefs->toolbarIconSingle);
 			pf->Close();
 		}
 	}
@@ -77,7 +80,7 @@ Bool PluginStart()
 	g_pControlImages = BaseBitmap::Alloc();
 	if (!g_pControlImages)
 		return false;
-	if (g_pControlImages->Init(GeGetPluginPath() + String("res") + String("buttons.tif"))!=IMAGERESULT_OK)
+	if (g_pControlImages->Init(GeGetPluginPath() + String("res") + String("images") + String("toolbar.tif")) != IMAGERESULT_OK)
 		return false;
 
 	g_pstrFillSave = NewObjClear(String);
@@ -97,6 +100,9 @@ Bool PluginStart()
 		pf->ReadFilename(&g_pResEditPrefs->fnNewZip);
 		pf->ReadFilename(&g_pResEditPrefs->fnDestZip);
 		g_pResEditPrefs->arOldFiles.Read(pf);
+		pf->ReadBool(&g_pResEditPrefs->toolbarIconSize);
+		pf->ReadBool(&g_pResEditPrefs->toolbarIconOrder);
+		pf->ReadBool(&g_pResEditPrefs->toolbarIconSingle);
 		pf->Close();
 	}
 	ReadDistriPrefs();

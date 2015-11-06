@@ -12,14 +12,7 @@
 #include "ResEditToolBar.h"
 #include "DialogDoc.h"
 #include "DialogItem.h"
-
-#include "customgui_bitmapbutton.h"
-
-#if (defined _DEBUG) && (defined USE_CPP_NEW_DELETE)
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+#include "IconButton.h"
 
 //////////////////////////////////////////////////////////////////////
 // Konstruktion/Destruktion
@@ -48,6 +41,14 @@ enum {
 	IDC_SUB_DLG_BTN,
 	IDC_CUSTOM_ELEMENT_BTN,
 
+	IDC_ICONSIZE_SMALL,
+	IDC_ICONSIZE_MEDIUM,
+	IDC_ICONSIZE_LARGE,
+	IDC_ICONORDER_HORIZ,
+	IDC_ICONORDER_VERT,
+	IDC_ICONSINGLE,
+	IDC_ICONGROUP,
+
 	IDC_DUMMY // just for the mac comiler :-)
 };
 
@@ -55,9 +56,9 @@ typedef struct {
 	Int32 lID;
 	ItemType type;
 	Int32 x, y;
-} tagButtonInfo;
+} _TagButtonInfo;
 
-tagButtonInfo g_pButtons[17] = {
+_TagButtonInfo g_pButtons[17] = {
 	{ IDC_STATIC_BTN,       Static, 1, 0 },
 	{ IDC_EDIT_BTN,         EditBox, 7, 0 },
 
@@ -84,16 +85,20 @@ tagButtonInfo g_pButtons[17] = {
 	{ IDC_CUSTOM_ELEMENT_BTN,      CustomElement, 7, 1 },
 };
 
+#define TOOLBAR_BUTTON_COUNT (sizeof(g_pButtons) / sizeof(g_pButtons[0]))
+
 CResEditToolBar::CResEditToolBar(CDialogDoc* pDoc)
 {
 	m_pDocument = pDoc;
 	m_pDocument->m_pToolbar = this;
 
 	m_bCloseState = false;
+	m_buttons = bNewDeprecatedUseArraysInstead<IconButton>(TOOLBAR_BUTTON_COUNT);  // XXX: nullptr check
 }
 
 CResEditToolBar::~CResEditToolBar()
 {
+	bDelete(m_buttons);
 }
 
 void ChangeWindowFlags(void* pHandle);
@@ -114,36 +119,12 @@ Bool CResEditToolBar::CreateLayout(void)
 	Bool bRes = GeDialog::CreateLayout();
 	SetTitle(GeLoadString(IDS_RES_EDIT_TOOLBAR));
 
-	// add some bitmap buttons
-	Int32 lCount = sizeof(g_pButtons) / sizeof(g_pButtons[0]);
-	Int32 a;
-	IconData d;
-	d.bmp = g_pControlImages;
-	d.w = CONTROLIMAGE_SIZE;
-	d.h = CONTROLIMAGE_SIZE;
-
-	// add the buttons
-	GroupBegin(100, BFH_SCALEFIT | BFV_SCALEFIT, 1, 1, "", 0);
-		GroupBegin(101, 0, 2, 1, "", 0);
-		BaseContainer settings;
-		settings.SetBool(BITMAPBUTTON_BUTTON,true);
-		settings.SetBool(BITMAPBUTTON_BORDER,BORDER_THIN_IN);
-
-		for (a = 0; a < lCount; a++)
-		{
-			BitmapButtonCustomGui* pBtn = (BitmapButtonCustomGui*)AddCustomGui(g_pButtons[a].lID, CUSTOMGUI_BITMAPBUTTON, String(), BFH_FIT, 0, 0, settings);
-			if (pBtn)
-			{
-				d.x = g_pButtons[a].x * CONTROLIMAGE_SIZE;
-				d.y = g_pButtons[a].y * CONTROLIMAGE_SIZE;
-				pBtn->SetImage(&d);
-			}
-		}
-		GroupEnd();
+	GroupBegin(IDC_ICONGROUP, BFH_SCALEFIT | BFV_SCALEFIT, 1, 1, "", 0);
+	UpdateToolbarIcons();
 	GroupEnd();
 
-	if (++g_lNeedFileNew == 4) m_pDocument->OnFileNew();
-
+	if (++g_lNeedFileNew == 4)
+		m_pDocument->OnFileNew();
 	return bRes;
 }
 
@@ -164,6 +145,23 @@ Bool CResEditToolBar::Command(Int32 lID, const BaseContainer &msg)
 		}
 	}
 
+	switch (lID) {
+		case IDC_ICONSIZE_SMALL:
+		case IDC_ICONSIZE_MEDIUM:
+		case IDC_ICONSIZE_LARGE:
+			g_pResEditPrefs->toolbarIconSize = lID;
+			UpdateToolbarIcons();
+			return true;
+		case IDC_ICONORDER_HORIZ:
+		case IDC_ICONORDER_VERT:
+			g_pResEditPrefs->toolbarIconOrder = lID;
+			UpdateToolbarIcons();
+			break;
+		case IDC_ICONSINGLE:
+			g_pResEditPrefs->toolbarIconSingle = !g_pResEditPrefs->toolbarIconSingle;
+			UpdateToolbarIcons();
+			break;
+	}
 	return true;
 }
 
@@ -196,4 +194,74 @@ Bool CResEditToolBar::AskClose()
 	if (!m_pDocument->CloseEditor()) return true;
 
 	return false;
+}
+
+/*********************************************************************\
+	Function name    : CResEditToolBar::UpdateToolbarIcons
+	Description      :
+	Created at       : 05.11.2015, @ 22:10
+	Created by       : Niklas Rosenstein
+\*********************************************************************/
+void CResEditToolBar::UpdateToolbarIcons()
+{
+	auto check = [](String const& s, Bool const c) -> String {
+		if (c) return s + "&c&";
+		return s;
+	};
+
+	Int32& iconSizeMode = g_pResEditPrefs->toolbarIconSize;
+	Int32& iconOrderMode = g_pResEditPrefs->toolbarIconOrder;
+
+	Int32 iconSize;
+	switch (iconSizeMode) {
+		case IDC_ICONSIZE_LARGE:
+			iconSize = 34;
+			break;
+		case IDC_ICONSIZE_MEDIUM:
+			iconSize = 26;
+			break;
+		case IDC_ICONSIZE_SMALL:
+		default:
+			iconSize = 20;
+			iconSizeMode = IDC_ICONSIZE_SMALL;
+			break;
+	}
+
+	Int32 const n = (g_pResEditPrefs->toolbarIconSingle ? 1 : 2);
+	Int32 cols = n, rows = 0;
+	if (iconOrderMode != IDC_ICONORDER_VERT) {
+		cols = 0, rows = n;
+		iconOrderMode = IDC_ICONORDER_HORIZ;
+	}
+
+	IconData icon;
+	icon.bmp = g_pControlImages;
+	icon.w = CONTROLIMAGE_SIZE;
+	icon.h = CONTROLIMAGE_SIZE;
+
+	LayoutFlushGroup(IDC_ICONGROUP);
+	GroupBegin(0, 0, cols, rows, "", 0);
+	for (Int32 idx = 0; idx < TOOLBAR_BUTTON_COUNT; ++idx) {
+		icon.x = g_pButtons[idx].x * CONTROLIMAGE_SIZE;
+		icon.y = g_pButtons[idx].y * CONTROLIMAGE_SIZE;
+		m_buttons[idx] = IconButton(icon, iconSize, iconSize);
+		auto gptr = AddUserArea(g_pButtons[idx].lID, 0);
+		AttachUserArea(m_buttons[idx], gptr);
+	}
+	GroupEnd();
+	LayoutChanged(IDC_ICONGROUP);
+
+	// Update the menus.
+	MenuFlushAll();
+	MenuSubBegin("View");
+	MenuAddString(IDC_ICONSIZE_SMALL, check("Small Icons", iconSizeMode == IDC_ICONSIZE_SMALL));
+	MenuAddString(IDC_ICONSIZE_MEDIUM, check("Medium Icons", iconSizeMode == IDC_ICONSIZE_MEDIUM));
+	MenuAddString(IDC_ICONSIZE_LARGE, check("Large Icons", iconSizeMode == IDC_ICONSIZE_LARGE));
+	MenuAddSeparator();
+	MenuAddString(IDC_ICONORDER_HORIZ, check("Horizontal Layout", iconOrderMode == IDC_ICONORDER_HORIZ));
+	MenuAddString(IDC_ICONORDER_VERT, check("Vertical Layout", iconOrderMode == IDC_ICONORDER_VERT));
+	MenuAddSeparator();
+	MenuAddString(IDC_ICONSINGLE, check("Dual Icons", !g_pResEditPrefs->toolbarIconSingle));
+	MenuSubEnd();
+	MenuFinished();
 }

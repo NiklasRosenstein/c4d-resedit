@@ -16,11 +16,13 @@
 
 class CDialogDoc;
 class BitmapButtonCustomGui;
+class IconButton;
 
 class CResEditToolBar : public GeDialog
 {
 public:
 	Bool m_bCloseState;
+
 	CResEditToolBar(CDialogDoc* pDoc);
 	virtual ~CResEditToolBar();
 
@@ -29,7 +31,10 @@ public:
 	virtual Bool Command(Int32 lID, const BaseContainer &msg);
 	virtual Bool InitValues(void);
 
+	void UpdateToolbarIcons();
+
 protected:
+	IconButton* m_buttons;
 	CDialogDoc* m_pDocument;
 };
 

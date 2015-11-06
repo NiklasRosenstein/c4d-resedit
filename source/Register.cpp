@@ -239,7 +239,7 @@ Bool RegisterResEdit(void)
 	} while (0);
 
 	g_pStringCompareIcons = BaseBitmap::Alloc();
-	if (!g_pStringCompareIcons || g_pStringCompareIcons->Init(GeGetPluginPath() + String("res") + String("StringCompare.tif"))!=IMAGERESULT_OK)
+	if (!g_pStringCompareIcons || g_pStringCompareIcons->Init(GeGetPluginPath() + String("res") + String("images") + String("stringcompare.tif")) != IMAGERESULT_OK)
 		strError = "Couldn't load StringCompare.tif";
 
 	if (strError != "")
