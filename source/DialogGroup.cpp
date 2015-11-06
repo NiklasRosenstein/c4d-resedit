@@ -48,7 +48,7 @@ CDialogGroup::CDialogGroup(CDialogDoc* pDoc)
 
 	m_lGroupType = 0; // simple (1 : tab, 2 : scroll, 3 : radio)
 
-	m_lLeftBorder = m_lRightBorder = m_lTopBorder = m_lBottomBorder = 0;
+	m_lLeftBorder = m_lRightBorder = m_lTopBorder = m_lBottomBorder = 6;
 	m_lSpaceX = m_lSpaceY = -1;
 
 	m_pDocument = pDoc;
