@@ -81,7 +81,14 @@ struct ResEditPrefs
 	String strOrigPath, strNewPath, strExtractPath, strWizardPath;
 	Filename fnNewZip, fnDestZip;
 	CDynamicFilenameSet arOldFiles;
-	Int32 toolbarIconSize, toolbarIconOrder;
+	Int32 toolbarIconSize, toolbarIconOrder, toolbarIconSingle;
+
+	ResEditPrefs()
+		: strOrigPath(), strNewPath(), strExtractPath(), strWizardPath(),
+			fnNewZip(), fnDestZip(),
+			arOldFiles(),
+			toolbarIconSize(NOTOK), toolbarIconOrder(NOTOK), toolbarIconSingle(false)
+	{ }
 };
 extern ResEditPrefs *g_pResEditPrefs;
 

@@ -46,6 +46,7 @@ enum {
 	IDC_ICONSIZE_LARGE,
 	IDC_ICONORDER_HORIZ,
 	IDC_ICONORDER_VERT,
+	IDC_ICONSINGLE,
 	IDC_ICONGROUP,
 
 	IDC_DUMMY // just for the mac comiler :-)
@@ -156,6 +157,10 @@ Bool CResEditToolBar::Command(Int32 lID, const BaseContainer &msg)
 			g_pResEditPrefs->toolbarIconOrder = lID;
 			UpdateToolbarIcons();
 			break;
+		case IDC_ICONSINGLE:
+			g_pResEditPrefs->toolbarIconSingle = !g_pResEditPrefs->toolbarIconSingle;
+			UpdateToolbarIcons();
+			break;
 	}
 	return true;
 }
@@ -222,9 +227,10 @@ void CResEditToolBar::UpdateToolbarIcons()
 			break;
 	}
 
-	Int32 cols = 2, rows = 0;
+	Int32 const n = (g_pResEditPrefs->toolbarIconSingle ? 1 : 2);
+	Int32 cols = n, rows = 0;
 	if (iconOrderMode != IDC_ICONORDER_VERT) {
-		cols = 0, rows = 2;
+		cols = 0, rows = n;
 		iconOrderMode = IDC_ICONORDER_HORIZ;
 	}
 
@@ -247,13 +253,15 @@ void CResEditToolBar::UpdateToolbarIcons()
 
 	// Update the menus.
 	MenuFlushAll();
-	MenuSubBegin("Edit");
+	MenuSubBegin("View");
 	MenuAddString(IDC_ICONSIZE_SMALL, check("Small Icons", iconSizeMode == IDC_ICONSIZE_SMALL));
 	MenuAddString(IDC_ICONSIZE_MEDIUM, check("Medium Icons", iconSizeMode == IDC_ICONSIZE_MEDIUM));
 	MenuAddString(IDC_ICONSIZE_LARGE, check("Large Icons", iconSizeMode == IDC_ICONSIZE_LARGE));
 	MenuAddSeparator();
 	MenuAddString(IDC_ICONORDER_HORIZ, check("Horizontal Layout", iconOrderMode == IDC_ICONORDER_HORIZ));
 	MenuAddString(IDC_ICONORDER_VERT, check("Vertical Layout", iconOrderMode == IDC_ICONORDER_VERT));
+	MenuAddSeparator();
+	MenuAddString(IDC_ICONSINGLE, check("Dual Icons", !g_pResEditPrefs->toolbarIconSingle));
 	MenuSubEnd();
 	MenuFinished();
 }
