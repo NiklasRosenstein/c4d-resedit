@@ -31,6 +31,7 @@ CDialogTemplate::CDialogTemplate(CDialogDoc* pDoc)
 	m_type = Dialog;
 	m_pDocument = pDoc;
 	m_strControlID = CreateControlID();
+	m_lFlags = BFH_SCALEFIT | BFV_SCALEFIT;
 }
 
 /*********************************************************************\

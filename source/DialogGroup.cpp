@@ -31,7 +31,7 @@ CDialogGroup::CDialogGroup(CDialogDoc* pDoc)
 	m_strName = GeLoadString(IDS_GROUP);
 	m_strDescr = m_strName;
 	m_type = Group;
-	m_lFlags = BFH_LEFT | BFV_TOP;
+	m_lFlags = BFH_SCALEFIT | BFV_SCALEFIT;
 	m_lInitW = 0;
 	m_lInitH = 0;
 
