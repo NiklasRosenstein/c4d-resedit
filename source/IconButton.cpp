@@ -64,3 +64,13 @@ Bool IconButton::InputEvent(BaseContainer const& msg)
   }
   return super::InputEvent(msg);
 }
+
+Bool IconButton::Message(BaseContainer const& msg, BaseContainer& res)
+{
+  if (msg.GetId() == BFM_GETCURSORINFO && m_tooltip.Content()) {
+    res.SetId(msg.GetId());
+    res.SetString(RESULT_BUBBLEHELP, m_tooltip);
+    return true;
+  }
+  return super::Message(msg, res);
+}

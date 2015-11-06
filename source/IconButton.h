@@ -14,19 +14,21 @@ class IconButton : public GeUserArea
 {
   typedef GeUserArea super;
 public:
-  IconButton() : m_icon(), m_border(NOTOK), m_width(NOTOK), m_height(NOTOK) { }
+  IconButton() : m_icon(), m_border(NOTOK), m_width(NOTOK), m_height(NOTOK), m_tooltip() { }
   IconButton(IconData const& icon, Int32 width=NOTOK, Int32 height=NOTOK)
-    : m_icon(icon), m_border(BORDER_THIN_IN), m_width(width), m_height(height) { }
+    : m_icon(icon), m_border(BORDER_THIN_IN), m_width(width), m_height(height), m_tooltip() { }
 
   virtual void DrawMsg(Int32 x, Int32 y, Int32 w, Int32 h, BaseContainer const& msg) override;
   virtual Bool GetMinSize(Int32& w, Int32& h) override;
   virtual Bool InputEvent(BaseContainer const& msg) override;
+  virtual Bool Message(BaseContainer const& msg, BaseContainer& res) override;
 
 public:
   IconData m_icon;
   Int32 m_border;
   Int32 m_width;
   Int32 m_height;
+  String m_tooltip;
 };
 
 #endif // RESEDIT_ICONBUTTON_H_

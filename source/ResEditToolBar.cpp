@@ -56,33 +56,34 @@ typedef struct {
 	Int32 lID;
 	ItemType type;
 	Int32 x, y;
+	Char* tooltip;
 } _TagButtonInfo;
 
 _TagButtonInfo g_pButtons[17] = {
-	{ IDC_STATIC_BTN,       Static, 1, 0 },
-	{ IDC_EDIT_BTN,         EditBox, 7, 0 },
+	{ IDC_STATIC_BTN,       Static, 1, 0, "Static Text"},
+	{ IDC_EDIT_BTN,         EditBox, 7, 0, "Edit Field"},
 
-	{ IDC_BUTTON_BTN,       Button, 5, 0 },
-	{ IDC_ARROW_BTN,        ArrowBtn, 6, 0 },
+	{ IDC_BUTTON_BTN,       Button, 5, 0, "Button" },
+	{ IDC_ARROW_BTN,        ArrowBtn, 6, 0, "Arrow" },
 
-	{ IDC_CHECK_BOX_BTN,    CheckBox, 3, 0 },
-	{ IDC_RADIO_BTN,        RadioBtn, 4, 0 },
+	{ IDC_CHECK_BOX_BTN,    CheckBox, 3, 0, "Checkbox" },
+	{ IDC_RADIO_BTN,        RadioBtn, 4, 0, "Radio" },
 
-	{ IDC_LIST_VIEW_BTN,    ListBox, 2, 1 },
-	{ IDC_COMBO_BOX_BTN,    ComboBox, 3, 1 },
-	{ IDC_COMBO_BUTTON_BTN, ComboButton, 8, 1 },
+	{ IDC_LIST_VIEW_BTN,    ListBox, 2, 1, "List View" },
+	{ IDC_COMBO_BOX_BTN,    ComboBox, 3, 1, "Combobox" },
+	{ IDC_COMBO_BUTTON_BTN, ComboButton, 8, 1, "Combobutton" },
 
-	{ IDC_GROUP_BTN,        Group, 2, 0 },
-	{ IDC_DIALOG_GROUP_BTN, DialogGroup, 4, 1 },
+	{ IDC_GROUP_BTN,        Group, 2, 0, "Group" },
+	{ IDC_DIALOG_GROUP_BTN, DialogGroup, 4, 1, "Dialog Group" },
 
-	{ IDC_SEPARATOR_BTN,    Separator, 1, 1 },
-	{ IDC_USER_AREA_BTN,    UserArea, 5, 1 },
+	{ IDC_SEPARATOR_BTN,    Separator, 1, 1, "Separator" },
+	{ IDC_USER_AREA_BTN,    UserArea, 5, 1, "User Area" },
 
-	{ IDC_SLIDER_BTN,       Slider, 8, 0 },
-	{ IDC_COLOR_FIELD_BTN,  Color, 0, 1 },
+	{ IDC_SLIDER_BTN,       Slider, 8, 0, "Slider" },
+	{ IDC_COLOR_FIELD_BTN,  Color, 0, 1, "Color Field" },
 
-	{ IDC_SUB_DLG_BTN,      SubDialogControl, 6, 1 },
-	{ IDC_CUSTOM_ELEMENT_BTN,      CustomElement, 7, 1 },
+	{ IDC_SUB_DLG_BTN,      SubDialogControl, 6, 1, "Sub Dialog" },
+	{ IDC_CUSTOM_ELEMENT_BTN,      CustomElement, 7, 1, "Custom GUI" },
 };
 
 #define TOOLBAR_BUTTON_COUNT (sizeof(g_pButtons) / sizeof(g_pButtons[0]))
@@ -118,6 +119,19 @@ Bool CResEditToolBar::CreateLayout(void)
 
 	Bool bRes = GeDialog::CreateLayout();
 	SetTitle(GeLoadString(IDS_RES_EDIT_TOOLBAR));
+
+	// Set up the buttons.
+	IconData icon;
+	icon.bmp = g_pControlImages;
+	icon.w = CONTROLIMAGE_SIZE;
+	icon.h = CONTROLIMAGE_SIZE;
+
+	for (Int32 idx = 0; idx < TOOLBAR_BUTTON_COUNT; ++idx) {
+		icon.x = g_pButtons[idx].x * CONTROLIMAGE_SIZE;
+		icon.y = g_pButtons[idx].y * CONTROLIMAGE_SIZE;
+		m_buttons[idx] = IconButton(icon, 20, 20);
+		m_buttons[idx].m_tooltip = g_pButtons[idx].tooltip;
+	}
 
 	GroupBegin(IDC_ICONGROUP, BFH_SCALEFIT | BFV_SCALEFIT, 1, 1, "", 0);
 	UpdateToolbarIcons();
@@ -234,17 +248,11 @@ void CResEditToolBar::UpdateToolbarIcons()
 		iconOrderMode = IDC_ICONORDER_HORIZ;
 	}
 
-	IconData icon;
-	icon.bmp = g_pControlImages;
-	icon.w = CONTROLIMAGE_SIZE;
-	icon.h = CONTROLIMAGE_SIZE;
-
 	LayoutFlushGroup(IDC_ICONGROUP);
 	GroupBegin(0, 0, cols, rows, "", 0);
 	for (Int32 idx = 0; idx < TOOLBAR_BUTTON_COUNT; ++idx) {
-		icon.x = g_pButtons[idx].x * CONTROLIMAGE_SIZE;
-		icon.y = g_pButtons[idx].y * CONTROLIMAGE_SIZE;
-		m_buttons[idx] = IconButton(icon, iconSize, iconSize);
+		m_buttons[idx].m_width = iconSize;
+		m_buttons[idx].m_height = iconSize;
 		auto gptr = AddUserArea(g_pButtons[idx].lID, 0);
 		AttachUserArea(m_buttons[idx], gptr);
 	}
