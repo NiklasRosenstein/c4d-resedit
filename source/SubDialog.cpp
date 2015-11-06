@@ -23,7 +23,7 @@ CDialogSubDlg::CDialogSubDlg(CDialogDoc* pDoc)
 	m_strName = GeLoadString(IDS_SUB_DIALOG);
 	m_strDescr = m_strName;
 	m_type = SubDialogControl;
-	m_lFlags = BFH_LEFT | BFV_TOP;
+	m_lFlags = BFH_SCALEFIT | BFV_SCALEFIT;
 	m_lInitW = 0;
 	m_lInitH = 0;
 	m_pDocument = pDoc;

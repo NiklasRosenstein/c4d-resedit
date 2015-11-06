@@ -23,7 +23,7 @@ CDialogDlgGroup::CDialogDlgGroup(CDialogDoc* pDoc)
 	m_strName = GeLoadString(IDS_DIALOG_GROUP);
 	m_strDescr = m_strName;
 	m_type = DialogGroup;
-	m_lFlags = BFH_LEFT | BFV_TOP;
+	m_lFlags = BFH_CENTER | BFV_TOP;
 	m_lInitW = 0;
 	m_lInitH = 0;
 	m_lItems = DLG_OK | DLG_CANCEL;

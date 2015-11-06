@@ -107,9 +107,9 @@ CDialogUserArea::CDialogUserArea(CDialogDoc* pDoc)
 	m_strName = GeLoadString(IDS_USER_AREA);
 	m_strDescr = m_strName;
 	m_type = UserArea;
-	m_lFlags = BFH_LEFT | BFV_TOP;
+	m_lFlags = BFH_SCALEFIT | BFV_TOP;
 	m_lInitW = 100;
-	m_lInitH = 100;
+	m_lInitH = 40;
 	m_pDocument = pDoc;
 	m_strControlID = CreateControlID();
 }

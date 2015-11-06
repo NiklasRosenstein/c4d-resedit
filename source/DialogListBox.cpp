@@ -24,7 +24,7 @@ CDialogListBox::CDialogListBox(CDialogDoc* pDoc)
 	m_strName = GeLoadString(IDS_LISTBOX);
 	m_strDescr = m_strName;
 	m_type = ListBox;
-	m_lFlags = BFH_LEFT | BFV_TOP;
+	m_lFlags = BFH_SCALEFIT | BFV_TOP;
 	m_lInitW = 150;
 	m_lInitH = 50;
 	m_pDocument = pDoc;

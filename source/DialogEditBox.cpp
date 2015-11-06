@@ -27,6 +27,7 @@ static char THIS_FILE[] = __FILE__;
 \*********************************************************************/
 CDialogEditBox::CDialogEditBox(CDialogDoc* pDoc)
 {
+	m_lFlags = BFH_LEFT | BFV_CENTER;
 	m_strName = GeLoadString(IDS_EDIT_BOX);
 	m_strDescr = m_strName;
 	m_type = EditBox;
