@@ -20,7 +20,7 @@ void ChangeWindowFlags(void* pHandle)
 
 	nStyleOffset = GWL_STYLE;
 	dwAdd = WS_CAPTION | WS_BORDER | WS_SYSMENU;
-	dwRemove = WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;
+	dwRemove = WS_MINIMIZEBOX | WS_MAXIMIZEBOX; // | WS_THICKFRAME;
 	dwStyle = GetWindowLong(hWnd, nStyleOffset);
 	dwNewStyle = (dwStyle & ~dwRemove) | dwAdd;
 	if (dwStyle != dwNewStyle)
