@@ -44,7 +44,7 @@ enum ItemType { unknown = -1, Dialog = 0, Static, Group, CheckBox, RadioBtn, But
 								Color, Separator, ListBox, ComboBox, DialogGroup, UserArea, SubDialogControl, CustomElement, ComboButton,
 								LastControlElement }; // just a dummy value
 extern BaseBitmap *g_pControlImages;
-static const Int32 CONTROLIMAGE_SIZE = 32;
+static const Int32 CONTROLIMAGE_SIZE = 64;
 extern Bool g_bAutoUpdate;
 extern String* g_pstrFillSave; // the complete fill string
 extern Int32 g_lFillChars; // the number of characters
