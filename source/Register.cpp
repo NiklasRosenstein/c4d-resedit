@@ -161,7 +161,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
-
+			RegisterResEditIcon(PLUGIN_ID_MENU_ITEM, 1, 2);
 		} while (0);
 		do {
 			g_pBrowserDialog = NewObjClear(CResEditBrowser);
@@ -171,6 +171,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
+			RegisterResEditIcon(PLUGIN_ID_BROWSER, 0, 2);
 		} while (0);
 
 		do {
@@ -180,6 +181,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
+			RegisterResEditIcon(PLUGIN_ID_COMPARE_MENU, 5, 2);
 		} while (0);
 
 		do {
@@ -189,6 +191,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
+			RegisterResEditIcon(PLUGIN_ID_HELP_MENU, 6, 2);
 		} while (0);
 
 		do
@@ -199,6 +202,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
+			RegisterResEditIcon(ID_STRING_TABLE_TRANS_DIALOG, 4, 2);
 		} while (0);
 
 		do
@@ -209,6 +213,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
+			RegisterResEditIcon(RES_EDIT_EXTRACT_ZIP, 2, 2);
 		} while (0);
 
 		do
@@ -219,6 +224,7 @@ Bool RegisterResEdit(void)
 				strError = GeLoadString(IDS_FAILED_REGISTER_RES_EDIT_MENU);
 				break;
 			}
+			RegisterResEditIcon(PLUGIN_ID_EDIT_DISTRI, 3, 2);
 		} while (0);
 
 		// register some invisible menu items

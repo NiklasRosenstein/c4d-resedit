@@ -494,6 +494,7 @@ class DiffDistriCommand : public CommandData
 
 Bool RegisterDiffZipCommand()
 {
+	RegisterResEditIcon(DIFF_DISTRI_ID, 8, 2);
 	RegisterCommandPlugin(DIFF_DISTRI_ID, GeLoadString(IDS_DIFF_DISTRI), 0, nullptr, GeLoadString(IDS_DIFF_DISTRI), NewObjClear(DiffDistriCommand));
 	return true;
 }

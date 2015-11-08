@@ -76,6 +76,7 @@ void AddFilename(Filename &fn, const Filename fnDest);
 char* GetOSEnvironmentVariable(const char* pszVarName, char* pszVar, unsigned int nVarLen);
 Bool ForceOpenFileWrite(BaseFile* pFile, const Filename &fn);
 Bool ReadPreset(const Filename& fnPreset);
+Bool RegisterResEditIcon(Int32 id, Int32 x, Int32 y);
 
 struct ResEditPrefs
 {

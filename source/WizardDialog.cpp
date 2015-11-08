@@ -896,5 +896,6 @@ public:
 
 Bool RegisterWizardCommand()
 {
+	RegisterResEditIcon(ID_RES_EDIT_WIZARD, 7, 2);
 	return RegisterCommandPlugin(ID_RES_EDIT_WIZARD, GeLoadString(IDS_WIZARD), 0, nullptr, GeLoadString(IDS_WIZARD), NewObjClear(WizardCommand));
 }

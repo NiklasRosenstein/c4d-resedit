@@ -72,16 +72,16 @@ Bool PluginStart()
 #endif
 	if (!resource.Init()) return false; // don't start plugin without resource
 
-	if (!RegisterResEdit()) return false;
-	if (!RegisterWizardCommand()) return false;
-	if (!RegisterDiffZipCommand()) return false;
-
 	// load the control images
 	g_pControlImages = BaseBitmap::Alloc();
 	if (!g_pControlImages)
 		return false;
 	if (g_pControlImages->Init(GeGetPluginPath() + String("res") + String("images") + String("toolbar.tif")) != IMAGERESULT_OK)
 		return false;
+
+	if (!RegisterResEdit()) return false;
+	if (!RegisterWizardCommand()) return false;
+	if (!RegisterDiffZipCommand()) return false;
 
 	g_pstrFillSave = NewObjClear(String);
 	g_pLastOpenFile = NewObjClear(Filename);

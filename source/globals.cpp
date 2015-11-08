@@ -496,3 +496,12 @@ Bool ForceOpenFileWrite(BaseFile* pFile, const Filename &fn)
 	GeFKill(fn, GE_FKILL_FORCE);
 	return pFile->Open(fn, FILEOPEN_WRITE);
 }
+
+Bool RegisterResEditIcon(Int32 id, Int32 x, Int32 y)
+{
+	CriticalAssert(g_pControlImages);
+	x *= CONTROLIMAGE_SIZE;
+	y *= CONTROLIMAGE_SIZE;
+	return RegisterIcon(
+		id, g_pControlImages, x, y, CONTROLIMAGE_SIZE, CONTROLIMAGE_SIZE);
+}
