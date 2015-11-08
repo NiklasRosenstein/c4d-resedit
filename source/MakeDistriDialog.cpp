@@ -540,6 +540,9 @@ Bool MakeDistriDialog::Command(Int32 lID, const BaseContainer &msg)
 {
 	switch (lID)
 	{
+	case IDC_DISTR_OK:
+		Close(true);
+		break;
 	case IDC_DISTR_NEW_PRESET_BTN:
 		{
 			PresetElement* pNew = g_Presets.GetNextObject();

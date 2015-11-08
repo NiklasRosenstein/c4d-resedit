@@ -4,6 +4,7 @@ DIALOGSTRINGS IDD_MAKE_DISTRI_DLG
 {
   IDS_BUTTON                        "Button";
   IDS_BUTTON1                       "Button";
+  IDS_BUTTON2                       "OK";
   IDS_CHECK_VERSION                 "Check Version";
   IDS_DIALOG                        "Make Distribution";
   IDS_DISTRI_ACTION                 "Action";
