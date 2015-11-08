@@ -39,11 +39,6 @@ CHelpMenu::~CHelpMenu()
 \*********************************************************************/
 Bool CHelpMenu::Execute(BaseDocument *doc)
 {
-	Filename fn = GeGetPluginPath();
-	fn += Filename("Doc");
-	fn += GeLoadString(IDS_HELP_FILE);
-
-	GeExecuteFile(fn);
-
+	GeOpenHTML("https://developers.maxon.net/docs/Cinema4DCPPSDK/html/page_user_interface.html");
 	return true;
 }
