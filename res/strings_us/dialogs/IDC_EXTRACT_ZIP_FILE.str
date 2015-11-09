@@ -10,6 +10,7 @@ DIALOGSTRINGS IDC_EXTRACT_ZIP_FILE
   IDS_IGNORE_READ_ONLY  "Ignore Read-only flags";
   IDS_STATIC            "Group";
   IDS_STATIC1           "Static text";
+  IDS_STATIC10          "Group";
   IDS_STATIC2           "ZIP File:";
   IDS_STATIC3           "Group";
   IDS_STATIC4           "Static text";

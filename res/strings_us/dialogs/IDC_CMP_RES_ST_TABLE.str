@@ -10,4 +10,5 @@ DIALOGSTRINGS IDC_CMP_RES_ST_TABLE
   IDS_STATIC2          "";
   IDS_STATIC3          "Group";
   IDS_STATIC4          "Contents:";
+  IDS_STATIC5          "Group";
 }

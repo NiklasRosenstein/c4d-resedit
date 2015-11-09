@@ -14,6 +14,7 @@ DIALOGSTRINGS IDC_STRING_TRANS_DIALOG
   IDS_STATIC24                        "Base Language  ";
   IDS_STATIC25                        "";
   IDS_STATIC26                        "Group";
+  IDS_STATIC27                        "Group";
   IDS_STATIC9                         " ";
   IDS_STRING_TRANS_AVAIL_ST           "Available string tables:";
   IDS_STRING_TRANS_CHANGELANG         "Change language";

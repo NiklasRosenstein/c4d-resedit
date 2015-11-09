@@ -12,4 +12,5 @@ DIALOGSTRINGS IDD_DIFF_DISTRI_DLG
   IDS_STATIC4          "Group";
   IDS_STATIC5          "Destination path";
   IDS_STATIC6          "Password";
+  IDS_STATIC7          "Group";
 }
