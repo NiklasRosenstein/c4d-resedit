@@ -324,10 +324,9 @@ TreeViewItem* TreeViewItem::GetPred()
 }
 
 
-
-
-
-class Function2 : public TreeViewFunctions
+/*********************************************************************\
+\*********************************************************************/
+static class TreeViewModel : public TreeViewFunctions
 {
 	public:
 
@@ -599,14 +598,7 @@ class Function2 : public TreeViewFunctions
 			}
 			return true;
 		}
-} functable;
-
-
-
-
-
-
-
+} g_treeModel;
 
 
 TreeView::TreeView()
@@ -860,7 +852,7 @@ Bool TreeView::CreateTreeView(Int32 lTreeID, GeDialog* pParent, Int32 lElementTy
 	layout.SetInt32('tree', LV_TREE);
 	m_pTree->SetLayout(2,layout);
 
-	m_pTree->SetRoot(&m_RootItem, &functable, this);
+	m_pTree->SetRoot(&m_RootItem, &g_treeModel, this);
 
 	m_lTreeID = lTreeID;
 	m_lElementType = lElementType;
