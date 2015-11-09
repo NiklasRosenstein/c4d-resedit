@@ -601,7 +601,7 @@ static class TreeViewModel : public TreeViewFunctions
 } g_treeModel;
 
 
-TreeView::TreeView()
+TreeView::TreeView(Bool showIcons)
 {
 	m_lCursor = MOUSE_SHOW;
 	m_lVisibleHeight = m_lVisibleWidth = 0;
@@ -612,6 +612,7 @@ TreeView::TreeView()
 	m_pDragDestination = nullptr;
 	m_DeleteCallback = nullptr;
 	m_bMayUpdate = true;
+	m_bShowIcons = showIcons;
 }
 
 TreeView::~TreeView()
@@ -847,10 +848,14 @@ Bool TreeView::CreateTreeView(Int32 lTreeID, GeDialog* pParent, Int32 lElementTy
 	m_pTree = (TreeViewCustomGui*)pParent->FindCustomGui(lTreeID, CUSTOMGUI_TREEVIEW);
 	if (!m_pTree) return false;
 
+	Int32 count = 1;
 	BaseContainer layout;
-	layout.SetInt32('icon', LV_USER);
+	if (m_bShowIcons) {
+		layout.SetInt32('icon', LV_USER);
+		count++;
+	}
 	layout.SetInt32('tree', LV_TREE);
-	m_pTree->SetLayout(2,layout);
+	m_pTree->SetLayout(count, layout);
 
 	m_pTree->SetRoot(&m_RootItem, &g_treeModel, this);
 

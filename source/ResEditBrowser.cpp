@@ -34,7 +34,7 @@ enum
 	ID_DUMMY
 };
 
-CResEditBrowser::CResEditBrowser()
+CResEditBrowser::CResEditBrowser() : m_wndTreeView(false)
 {
 	m_strPath = GeGetStartupPath() + String("resource");
 	m_dirText = "";

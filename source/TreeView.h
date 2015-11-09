@@ -71,7 +71,7 @@ typedef void (*VisitChildrenCallbackA)(TreeViewItem* pItem, void* pData);
 class TreeView
 {
 public:
-	TreeView();
+	TreeView(Bool showIcons=true);
 	virtual ~TreeView();
 	Bool CreateTreeView(Int32 lTreeID, GeDialog* pParent, Int32 lElementType,
 		DeleteTreeViewItemCallback pDeleteCallbackFunc = nullptr, Int32 lTreeViewFlags = TREE_ITEM_SAME_HEIGHT,
@@ -135,6 +135,7 @@ public:
 	Bool m_bMayUpdate;
 
 	Int32 m_lElementType;
+	Bool m_bShowIcons;
 };
 
 #endif // !defined(AFX_TREEVIEW_H__55612DC1_90DA_11D5_9B3B_004095418E0F__INCLUDED_)
