@@ -10,8 +10,7 @@ This fork aims to eliminate curcial bugs in the original ResEdit plugin.
 1. Get [Craftr][] and [Ninja][]
 2. Copy the [maxon.c4d][] Craftr module into the plugins directory
 3. Check out the code from this repository
-4. `mkdir build && chdir build`
-5. `craftr -c.. export && ninja`
+5. Use `craftr -eb` to build the project
 
   [Releases]: https://github.com/nr-plugins/resedit/releases
   [Milestones]: https://github.com/nr-plugins/resedit/milestones?state=closed

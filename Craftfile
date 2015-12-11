@@ -1,27 +1,27 @@
 # craftr_module(maxon.c4d.resedit)
-append_search_path('..')
-load_module('maxon.c4d')
-load_module('platform')
+
+from craftr import session, path, platform
+session.path.append(path.local('..'))
+session.update()
+
+from craftr.ext.maxon import c4d
 
 defines = ['__C4D_64BIT']
-if platform.id == 'win':
+if platform.name == 'Windows':
   defines += ['_WINDOWS']
-elif platform.id == 'mac':
+elif platform.name == 'Darwin':
   defines += ['__MAC']
+else:
+  raise EnvironmentError('unsupported platform: {0}'.format(platform.name))
 
-objects = maxon.c4d.objects(
-  sources = glob('source/**/*.cpp'),
-  options = dict(
-    includes = [local('res')],
-    defines = defines,
-  ),
+objects = c4d.objects(
+  sources = path.glob('source/**/*.cpp'),
+  include = [path.local('res')],
+  defines = defines,
 )
 
-plugin = maxon.c4d.plugin(
-  filename = local('resedit'),
-  inputs = [maxon.c4d.library, objects],
-  default = True,
-  options = dict(
-    msvc_link_with = ['User32.lib'],
-  ),
+plugin = c4d.link(
+  output = path.local('resedit-nrplugins-r{0}'.format(c4d.release)),
+  inputs = objects,
+  msvc_libs = ['User32'],
 )

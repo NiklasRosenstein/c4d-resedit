@@ -8,6 +8,9 @@
 // WARNING : Only edit this file, if you exactly know what you are doing.
 // WARNING : The comments are important, too.
 
+#ifndef _C4D_SYMBOLS_H__
+#define _C4D_SYMBOLS_H__
+
 enum
 {
 	_FIRST_ELEMENT_      = 10000,
@@ -437,7 +440,7 @@ enum
 	IDC_EXTRACT_FILES_TREE,
 	IDC_EXTRACT_DEST_PATH,
 	IDC_EXTRACT_EXTRACT_BTN,
-  	IDC_OK_BTN,
+  // IDC_OK_BTN,
 	// Dialog definitions of IDC_EXTRACT_ZIP_FILE end here
   // Dialog definitions of IDD_MAKE_DISTRI_DLG start here
   IDD_MAKE_DISTRI_DLG,
@@ -510,3 +513,5 @@ enum
 // End of symbol definition
   _DUMMY_ELEMENT_
 };
+
+#endif // _C4D_SYMBOLS_H__
