@@ -18,6 +18,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 Bool RegisterResEdit(void);
+Bool RegisterDescEdit();
 Bool RegisterWizardCommand();
 Bool RegisterDiffZipCommand();
 void FreeMenuItems();
@@ -80,6 +81,7 @@ Bool PluginStart()
 		return false;
 
 	if (!RegisterResEdit()) return false;
+	if (!RegisterDescEdit()) return false;
 	if (!RegisterWizardCommand()) return false;
 	if (!RegisterDiffZipCommand()) return false;
 
