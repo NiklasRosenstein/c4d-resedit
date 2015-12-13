@@ -4,16 +4,22 @@
 
 #include <c4d.h>
 #include <customgui_description.h>
+#include "DescItem.h"
 
+// ===========================================================================
+// ===========================================================================
+Bool RegisterDescEdit();
+
+// ===========================================================================
+// ===========================================================================
 enum
 {
-  PLUGIN_ID = 1036513,
-  PLUGIN_ID_NODE = 1036514,
   __FIRST_ITEM__ = 10000,
   IDC_DESC,
+  PLUGIN_ID = 1036513,
+  PLUGIN_ID_NODE = 1036514,
+  MSG_DESCNODE_SETROOT = 1036514,
 };
-
-Bool RegisterDescEdit();
 
 // ===========================================================================
 // ===========================================================================
@@ -36,11 +42,13 @@ class DescEditDialog : public GeDialog
   typedef GeDialog super;
 public:
   DescEditDialog();
+  ~DescEditDialog();
   Bool CreateLayout() override;
   Bool InitValues() override;
   Bool Command(Int32, BaseContainer const&) override;
   void SetPreviewDialog(DescPreviewDialog* dlg) { _dlgPreview = dlg; }
 private:
+  DescItem* _descRoot;
   BaseList2D* _descNode;
   DescPreviewDialog* _dlgPreview;
 };
@@ -66,8 +74,12 @@ class DescNode : public NodeData
 {
   typedef NodeData super;
 public:
+  DescNode();
   Bool GetDDescription(GeListNode*, Description*, DESCFLAGS_DESC&) override;
+  Bool Message(GeListNode*, Int32, void*) override;
   static NodeData* Alloc() { return NewObjClear(DescNode); }
+private:
+  DescItem* _descRoot;
 };
 
 // ===========================================================================
@@ -115,10 +127,22 @@ Bool DescPreviewDialog::InitValues()
 
 // ===========================================================================
 // ===========================================================================
-DescEditDialog::DescEditDialog() : _descNode(nullptr), _dlgPreview(nullptr)
+DescEditDialog::DescEditDialog()
+: _descRoot(nullptr), _descNode(nullptr), _dlgPreview(nullptr)
 {
-  // xxx: Allocate custom node plugin here.
+  _descRoot = NewObjClear(DescItem, DTYPE_GROUP, "Container");
   _descNode = BaseList2D::Alloc(PLUGIN_ID_NODE);
+  if (_descNode) {
+    _descNode->Message(MSG_DESCNODE_SETROOT, _descRoot);
+  }
+}
+
+// ===========================================================================
+// ===========================================================================
+DescEditDialog::~DescEditDialog()
+{
+  DeleteObj(_descRoot);
+  BaseList2D::Free(_descNode);
 }
 
 // ===========================================================================
@@ -180,10 +204,31 @@ Bool DescEditCommand::RestoreLayout(void* secret)
 
 // ===========================================================================
 // ===========================================================================
+DescNode::DescNode() : _descRoot(nullptr)
+{
+}
+
+// ===========================================================================
+// ===========================================================================
 Bool DescNode::GetDDescription(GeListNode*, Description* desc, DESCFLAGS_DESC& flags)
 {
   flags |= DESCFLAGS_DESC_LOADED;
+  if (_descRoot) {
+    _descRoot->GetDDescription(desc, DESCID_ROOT);
+  }
   return true;
+}
+
+// ===========================================================================
+// ===========================================================================
+Bool DescNode::Message(GeListNode* node, Int32 msg, void* pData)
+{
+  switch (msg) {
+    case MSG_DESCNODE_SETROOT:
+      _descRoot = reinterpret_cast<DescItem*>(pData);
+      break;
+  }
+  return super::Message(node, msg, pData);
 }
 
 // ===========================================================================
