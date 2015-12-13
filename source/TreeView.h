@@ -51,6 +51,7 @@ public:
 	TreeViewItem* GetUp() { return m_pParent; }
 
 	void DestroyAllChildren(DeleteTreeViewItemCallback func);
+	Bool AddItem(TreeViewItem* pNewItem, TreeViewItem* pInsertAfter = nullptr);
 	TreeViewItem* AddItem(const BaseContainer &data, TreeViewItem* pInsertAfter = nullptr);
 	void RemoveChild(TreeViewItem* pItem, DeleteTreeViewItemCallback cb = nullptr);
 	void RemoveChild(Int32 lChildIndex, DeleteTreeViewItemCallback cb = nullptr);

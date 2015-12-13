@@ -43,19 +43,13 @@ TreeViewItem::~TreeViewItem()
 	DestroyAllChildren(nullptr);
 }
 
-/*********************************************************************\
-	Function name    : TreeViewItem::AddItem
-	Description      :
-	Created at       : 14.08.01, @ 19:05:03
-	Created by       : Thomas Kunert
-	Modified by      :
-\*********************************************************************/
-TreeViewItem* TreeViewItem::AddItem(const BaseContainer &data, TreeViewItem* pInsertAfter)
+Bool TreeViewItem::AddItem(TreeViewItem* pNewItem, TreeViewItem* pInsertAfter)
 {
-	TreeViewItem* pNewItem = NewObjClear(TreeViewItem);
-	pNewItem->m_Data = data;
-
 	TreeViewItem** pNewChildren = bNewDeprecatedUseArraysInstead<TreeViewItem*>(m_lChildren + 1);
+	if (pNewChildren == nullptr) {
+		return false;
+	}
+
 	Int32 a, b;
 	for (a = 0, b = 0; a < m_lChildren; a++, b++)
 	{
@@ -72,6 +66,24 @@ TreeViewItem* TreeViewItem::AddItem(const BaseContainer &data, TreeViewItem* pIn
 		m_ppChildren[m_lChildren] = pNewItem;
 	m_lChildren++;
 
+	return true;
+}
+
+/*********************************************************************\
+	Function name    : TreeViewItem::AddItem
+	Description      :
+	Created at       : 14.08.01, @ 19:05:03
+	Created by       : Thomas Kunert
+	Modified by      :
+\*********************************************************************/
+TreeViewItem* TreeViewItem::AddItem(const BaseContainer &data, TreeViewItem* pInsertAfter)
+{
+	TreeViewItem* pNewItem = NewObjClear(TreeViewItem);
+	pNewItem->m_Data = data;
+	if (!AddItem(pNewItem, pInsertAfter)) {
+		DeleteObj(pNewItem);
+		return nullptr;
+	}
 	return pNewItem;
 }
 
