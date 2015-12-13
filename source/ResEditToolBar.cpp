@@ -56,7 +56,7 @@ typedef struct {
 	Int32 lID;
 	ItemType type;
 	Int32 x, y;
-	Char* tooltip;
+	Char const* tooltip;
 } _TagButtonInfo;
 
 _TagButtonInfo g_pButtons[17] = {

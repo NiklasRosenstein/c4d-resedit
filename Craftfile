@@ -18,6 +18,8 @@ objects = c4d.objects(
   sources = path.glob('source/**/*.cpp'),
   include = [path.local('res')],
   defines = defines,
+  clang_remove_flags = ['-Wmissing-prototypes', '-Wshadow'],
+  clang_additional_flags = ['-Wno-deprecated-register'],
 )
 
 plugin = c4d.link(
