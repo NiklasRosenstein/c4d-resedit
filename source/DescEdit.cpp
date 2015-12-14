@@ -5,6 +5,7 @@
 #include <c4d.h>
 #include <customgui_description.h>
 #include "DescItem.h"
+#include "TreeView.h"
 
 // ===========================================================================
 // ===========================================================================
@@ -14,11 +15,12 @@ Bool RegisterDescEdit();
 // ===========================================================================
 enum
 {
-  __FIRST_ITEM__ = 10000,
-  IDC_DESC,
   PLUGIN_ID = 1036513,
   PLUGIN_ID_NODE = 1036514,
   MSG_DESCNODE_SETROOT = 1036514,
+  __FIRST_ITEM__ = 10000,
+  IDC_DESC,
+  IDC_TREE,
 };
 
 // ===========================================================================
@@ -48,6 +50,7 @@ public:
   Bool Command(Int32, BaseContainer const&) override;
   void SetPreviewDialog(DescPreviewDialog* dlg) { _dlgPreview = dlg; }
 private:
+  TreeView _treeView;
   DescItem* _descRoot;
   BaseList2D* _descNode;
   DescPreviewDialog* _dlgPreview;
@@ -130,11 +133,19 @@ Bool DescPreviewDialog::InitValues()
 DescEditDialog::DescEditDialog()
 : _descRoot(nullptr), _descNode(nullptr), _dlgPreview(nullptr)
 {
-  _descRoot = NewObjClear(DescItem, DTYPE_GROUP, "Container");
+  _descRoot = NewObjClear(DescItem, DESCID_ROOT, "CONTAINER");
   _descNode = BaseList2D::Alloc(PLUGIN_ID_NODE);
   if (_descNode) {
     _descNode->Message(MSG_DESCNODE_SETROOT, _descRoot);
   }
+  if (_descRoot) {
+    _treeView.m_RootItem.AddItem(_descRoot->GetTreeItem());
+  }
+  // xxx: debug
+  auto group = NewObjClear(DescItem, DescLevel(1000, DTYPE_GROUP, 0), "GROUP");
+  auto field = NewObjClear(DescItem, DescLevel(1001, DTYPE_LONG, 0));
+  _descRoot->AddChild(group);
+  group->AddChild(field);
 }
 
 // ===========================================================================
@@ -150,7 +161,7 @@ DescEditDialog::~DescEditDialog()
 Bool DescEditDialog::CreateLayout()
 {
   SetTitle("DescEdit");
-  return true;
+  return _treeView.CreateTreeView(IDC_TREE, this, NOTOK);
 }
 
 // ===========================================================================
@@ -214,7 +225,7 @@ Bool DescNode::GetDDescription(GeListNode*, Description* desc, DESCFLAGS_DESC& f
 {
   flags |= DESCFLAGS_DESC_LOADED;
   if (_descRoot) {
-    _descRoot->GetDDescription(desc, DESCID_ROOT);
+    _descRoot->GetDDescription(desc, DescID());
   }
   return true;
 }

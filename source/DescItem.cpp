@@ -4,24 +4,24 @@
 
 #include "DescItem.h"
 #include "TreeView.h"
-#include "globals.h"  // TREEVIEW_DATA
 
 // ===========================================================================
 // ===========================================================================
-DescItem::DescItem(Int32 dtype, String name)
-: _dtype(dtype), _treeItem(NewObjClear(TreeViewItem))
+DescItem::DescItem(DescID const& id, String name, TreeViewItem* item)
+: _id(id), _treeItem(item ? item : NewObjClear(TreeViewItem))
 {
   BaseContainer* data = GetData();
   if (data) {
-    GetCustomDataTypeDefault(_dtype).CopyTo(data, COPYFLAGS_0, nullptr);
+    GetCustomDataTypeDefault(GetDType()).CopyTo(data, COPYFLAGS_0, nullptr);
     if (!name.Content()) {
       name = GetTypeName();
+      name = name.SubStr(0, 1) + name.SubStr(1, name.GetLength() - 1).ToLower();
     }
     data->SetString(DESC_NAME, name);
     data->SetString(DESC_SHORT_NAME, name);
 
     // Link the DescItem with the TreeViewItem.
-    data->SetVoid(TREEVIEW_DATA, this);
+    data->SetVoid(DESCITEM_LINK, this);
   }
 }
 
@@ -73,6 +73,16 @@ DescItem* DescItem::GetDown() const
 
 // ===========================================================================
 // ===========================================================================
+Bool DescItem::AddChild(DescItem* item)
+{
+  if (_treeItem && item && item->_treeItem) {
+    _treeItem->AddItem(item->_treeItem);
+  }
+  return false;
+}
+
+// ===========================================================================
+// ===========================================================================
 Bool DescItem::GetDDescription(Description* desc, DescID const& parentId)
 {
   BaseContainer* data = GetData();
@@ -80,12 +90,25 @@ Bool DescItem::GetDDescription(Description* desc, DescID const& parentId)
     return false;
   }
 
-  if (GetType() == DTYPE_GROUP) {
-    if (IsRoot()) {
-      BaseContainer* param = desc->GetParameterI(parentId, nullptr);
-      CriticalAssert(param != nullptr);
-      param->SetString(DESC_NAME, data->GetString(DESC_NAME));
-      param->SetString(DESC_SHORT_NAME, data->GetString(DESC_SHORT_NAME));
+  BaseContainer* param = nullptr;
+  if (GetDType() == 0) {
+    CriticalAssert(_id == DESCID_ROOT && IsRoot());
+    param = desc->GetParameterI(_id, nullptr);
+    CriticalAssert(param != nullptr);
+    data->CopyTo(param, COPYFLAGS_0, nullptr);
+  }
+  else {
+    GeData iddat;
+    iddat.SetCustomDataType(CUSTOMDATATYPE_DESCID, parentId);
+    data->SetData(DESC_PARENTGROUP, iddat);
+    CriticalAssert(!IsRoot() && _id == GetUp()->_id);
+    CriticalAssert(desc->SetParameter(_id, *data, parentId));
+  }
+
+  DescItem* child;
+  for (child = GetDown(); child; child = child->GetNext()) {
+    if (!child->GetDDescription(desc, _id)) {
+      return false;
     }
   }
   return true;
@@ -95,7 +118,7 @@ Bool DescItem::GetDDescription(Description* desc, DescID const& parentId)
 // ===========================================================================
 String DescItem::GetTypeName() const
 {
-  CUSTOMDATATYPEPLUGIN* plug = FindCustomDataTypePlugin(_dtype);
+  CUSTOMDATATYPEPLUGIN* plug = FindCustomDataTypePlugin(GetDType());
   if (plug && plug->adr) {
     auto cls = reinterpret_cast<CustomDataTypeClass*>(plug->adr);
     return (cls->*plug->GetResourceSym)();
@@ -126,7 +149,7 @@ BaseContainer* DescItem::GetData() const
 /*static*/ DescItem* DescItem::Get(TreeViewItem* item)
 {
   if (item) {
-    return reinterpret_cast<DescItem*>(item->m_Data.GetVoid(TREEVIEW_DATA));
+    return reinterpret_cast<DescItem*>(item->m_Data.GetVoid(DESCITEM_LINK));
   }
   return nullptr;
 }
