@@ -6,6 +6,7 @@
 #include <customgui_description.h>
 #include "DescItem.h"
 #include "TreeView.h"
+#include "atexit.h"
 
 // ===========================================================================
 // ===========================================================================
@@ -33,6 +34,7 @@ public:
   Bool CreateLayout() override;
   Bool InitValues() override;
   DescriptionCustomGui* GetDescriptionGui() const { return _descGui; }
+  void PluginEnd() { }
 private:
   DescriptionCustomGui* _descGui;
 };
@@ -49,6 +51,7 @@ public:
   Bool InitValues() override;
   Bool Command(Int32, BaseContainer const&) override;
   void SetPreviewDialog(DescPreviewDialog* dlg) { _dlgPreview = dlg; }
+  void PluginEnd() { DeleteObj(_descRoot); BaseList2D::Free(_descNode); }
 private:
   TreeView _treeView;
   DescItem* _descRoot;
@@ -64,6 +67,7 @@ class DescEditCommand : public CommandData
 public:
   Bool Execute(BaseDocument*) override;
   Bool RestoreLayout(void* secret) override;
+  void PluginEnd() { _dlgPreview.PluginEnd(); _dlgEdit.PluginEnd(); }
 private:
   DescPreviewDialog _dlgPreview;
   DescEditDialog _dlgEdit;
@@ -152,8 +156,8 @@ DescEditDialog::DescEditDialog()
 // ===========================================================================
 DescEditDialog::~DescEditDialog()
 {
-  DeleteObj(_descRoot);
-  BaseList2D::Free(_descNode);
+  CriticalAssert(_descRoot == nullptr);
+  CriticalAssert(_descNode == nullptr);
 }
 
 // ===========================================================================
@@ -256,13 +260,18 @@ Bool RegisterDescEdit()
     }
   }
   {
+    auto data = NewObjClear(DescEditCommand);
     Int32 const info = 0;
     BaseBitmap* const icon = nullptr;
     String const help = "Description Resource Editor";
     if (!RegisterCommandPlugin(PLUGIN_ID, "DescEdit", info, icon,
-        help, NewObjClear(DescEditCommand))) {
+        help, data)) {
       return false;
     }
+    g_atexit.Append([data]()
+    {
+      if (data) data->PluginEnd();
+    });
   }
   return true;
 }

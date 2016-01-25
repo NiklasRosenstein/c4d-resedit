@@ -1,15 +1,16 @@
 # craftr_module(maxon.c4d.resedit)
 
-from craftr import session, path, platform
+from craftr import *
 session.path.append(path.local('..'))
 session.update()
 
+from craftr.ext import platform
 from craftr.ext.maxon import c4d
 
 defines = ['__C4D_64BIT']
-if platform.name == 'Windows':
+if platform.name == 'win':
   defines += ['_WINDOWS']
-elif platform.name == 'Darwin':
+elif platform.name == 'mac':
   defines += ['__MAC']
 else:
   raise EnvironmentError('unsupported platform: {0}'.format(platform.name))

@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "globals.h"
+#include "atexit.h"
 #include "MakeDistriDialog.h"
 
 
@@ -130,6 +131,11 @@ volatile const char* pChName = "Resource editor version 5.02 by Thomas Kunert";
 
 void EndActivity()
 {
+	// Invoke registered exit handlers.
+	for (auto it = g_atexit.Begin(); it != g_atexit.End(); ++it) {
+		(*it)();
+	}
+	g_atexit.Flush();
 	FreeMenuItems();
 	FreeDiffZipCommand();
 }
