@@ -1,5 +1,8 @@
 # ResEdit for Cinema 4D
 
+[![Github Releases](https://img.shields.io/github/downloads/nr-plugins/resedit/total.svg?maxAge=2592000)]()
+[![Github Latest Release](https://img.shields.io/github/downloads/nr-plugins/resedit/latest/total.svg?maxAge=2592000)]()
+
 This fork aims to eliminate curcial bugs in the original ResEdit plugin.
 
 - [Changelog][Milestones]
