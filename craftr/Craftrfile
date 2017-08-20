@@ -1,0 +1,28 @@
+# c4d-resedit
+
+cxx = load('craftr.lang.cxx')
+c4d = load('NiklasRosenstein.maxon.c4d')
+
+
+defines = ['__C4D_64BIT']
+if platform.name == 'win':
+  defines += ['_WINDOWS']
+elif platform.name == 'mac':
+  defines += ['__MAC']
+else:
+  raise EnvironmentError('unsupported platform: {0}'.format(platform.name))
+
+objects = cxx.compile_cpp(
+  sources = glob('source/**/*.cpp'),
+  include = [local('res')],
+  defines = defines,
+  frameworks = [c4d.sdk],
+  llvm_compile_additional_flags = ['-Wno-deprecated-register'],
+  #remove_flags = ['-Wmissing-prototypes', '-Wshadow']
+)
+
+plugin = cxx.shared_library(
+  output = local('resedit-nrplugins-r{0}'.format(c4d.release)),
+  inputs = objects,
+  msvc_libs = ['User32'],
+)
